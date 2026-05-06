@@ -2,9 +2,18 @@ export const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:80
 export const WS_BASE = process.env.NEXT_PUBLIC_WS_BASE ?? "http://localhost:8080/ws";
 
 export async function detectCity(): Promise<string> {
-  const res = await fetch(`${API_BASE}/location`, { cache: "no-store" });
-  const data = await res.json();
-  return data.city ?? "Unknown";
+    try {
+        const res = await fetch("http://ip-api.com/json/", { cache: "no-store" });
+
+        if (!res.ok) throw new Error("Failed to fetch location");
+
+        const data = await res.json();
+
+        return data.city || "Unknown City";
+    } catch (error) {
+        console.error("City detection error:", error);
+        return "Almaty";
+    }
 }
 
 export async function getLeaderboard(city: string) {
