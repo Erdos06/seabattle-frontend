@@ -3,15 +3,11 @@ export const WS_BASE = process.env.NEXT_PUBLIC_WS_BASE ?? "http://localhost:8080
 
 export async function detectCity(): Promise<string> {
     try {
-        const res = await fetch("https://ipapi.co/json/", { cache: "no-store" });
-
-        if (!res.ok) throw new Error("Failed to fetch location");
-
+        const res = await fetch(`${API_BASE}/location`, { cache: "no-store" });
         const data = await res.json();
-
         return data.city || "Almaty";
     } catch (error) {
-        console.error("City detection error:", error);
+        console.error("Error detecting city:", error);
         return "Almaty";
     }
 }
